@@ -60,10 +60,16 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build --no-cache -t ghcr.io/antoniusfaro/nextjs-docker-learning:latest .
+          IMAGE_TAG=${GITHUB_SHA}
 
-          docker push ghcr.io/antoniusfaro/nextjs-docker-learning:latest
-      #docker build -t ghcr.io/antoniusfaro/nextjs-docker-learning:latest .
+          docker build --no-cache \
+            -t ghcr.io/antoniusfaro/nextjs-docker-learning:$IMAGE_TAG .
+
+          docker push ghcr.io/antoniusfaro/nextjs-docker-learning:$IMAGE_TAG
+        # docker build --no-cache -t ghcr.io/antoniusfaro/nextjs-docker-learning:latest .
+
+        # docker push ghcr.io/antoniusfaro/nextjs-docker-learning:latest
+        #docker build -t ghcr.io/antoniusfaro/nextjs-docker-learning:latest .
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.2.0
 
@@ -73,11 +79,24 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
 
           script: |
-            cd /var/www/nextjs-docker-learning
+            IMAGE_TAG=${GITHUB_SHA}
 
-            export APP_NAME="${{ secrets.APP_NAME }}"
+            docker pull ghcr.io/antoniusfaro/nextjs-docker-learning:$IMAGE_TAG
 
-            docker pull ghcr.io/antoniusfaro/nextjs-docker-learning:latest
+            docker stop nextjs-app || true
+            docker rm nextjs-app || true
 
-            docker compose -f docker-compose.prod.yml up -d --force-recreate
+            docker run -d \
+              --name nextjs-app \
+              -p 127.0.0.1:3000:3000 \
+              --restart unless-stopped \
+              ghcr.io/antoniusfaro/nextjs-docker-learning:$IMAGE_TAG
+          # cd /var/www/nextjs-docker-learning
+
+          # export APP_NAME="${{ secrets.APP_NAME }}"
+
+          # docker pull ghcr.io/antoniusfaro/nextjs-docker-learning:latest
+
+          # docker compose -f docker-compose.prod.yml up -d --force-recreate
+
           #docker compose -f docker-compose.prod.yml up -d
