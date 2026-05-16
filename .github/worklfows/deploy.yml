@@ -1,0 +1,26 @@
+name: Docker VPS Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.2.0
+
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+
+          scripts: |
+            cd /var/www/nextjs-docker-learning
+
+            git pull origin main
+
+            docker compose -f docker-compose.prod.yml up -d --build
