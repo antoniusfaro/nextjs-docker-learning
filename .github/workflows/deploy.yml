@@ -50,13 +50,16 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_TOKEN }}
+      - name: Debug Commit
+        run: |
+          git log --oneline -n 3
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t ghcr.io/antoniusfaro/nextjs-docker-learning:latest .
+          docker build --no-cache -t ghcr.io/antoniusfaro/nextjs-docker-learning:latest .
 
           docker push ghcr.io/antoniusfaro/nextjs-docker-learning:latest
-
+      #docker build -t ghcr.io/antoniusfaro/nextjs-docker-learning:latest .
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.2.0
 
