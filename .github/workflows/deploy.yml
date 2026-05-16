@@ -68,6 +68,8 @@ jobs:
           script: |
             cd /var/www/nextjs-docker-learning
 
+            export APP_NAME="${{ secrets.APP_NAME }}"
+
             docker pull ghcr.io/antoniusfaro/nextjs-docker-learning:latest
 
             docker compose -f docker-compose.prod.yml up -d

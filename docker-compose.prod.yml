@@ -8,6 +8,16 @@
 #       - "3000:3000"
 
 #     restart: unless-stopped
+
+# services:
+#   nextjs-app:
+#     image: ghcr.io/antoniusfaro/nextjs-docker-learning:latest
+
+#     ports:
+#       - "127.0.0.1:3000:3000"
+
+#     restart: unless-stopped
+
 services:
   nextjs-app:
     image: ghcr.io/antoniusfaro/nextjs-docker-learning:latest
@@ -16,3 +26,6 @@ services:
       - "127.0.0.1:3000:3000"
 
     restart: unless-stopped
+
+    environment:
+      NEXT_PUBLIC_APP_NAME: "Production Docker App"
