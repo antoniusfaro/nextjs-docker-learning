@@ -79,9 +79,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
 
           script: |
-            IMAGE_TAG=${GITHUB_SHA}
-
-            docker pull ghcr.io/antoniusfaro/nextjs-docker-learning:$IMAGE_TAG
+            docker pull ghcr.io/antoniusfaro/nextjs-docker-learning:${{ github.sha }}
 
             docker stop nextjs-app || true
             docker rm nextjs-app || true
@@ -90,7 +88,7 @@ jobs:
               --name nextjs-app \
               -p 127.0.0.1:3000:3000 \
               --restart unless-stopped \
-              ghcr.io/antoniusfaro/nextjs-docker-learning:$IMAGE_TAG
+              ghcr.io/antoniusfaro/nextjs-docker-learning:${{ github.sha }}
           # cd /var/www/nextjs-docker-learning
 
           # export APP_NAME="${{ secrets.APP_NAME }}"
