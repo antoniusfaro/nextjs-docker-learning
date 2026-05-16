@@ -56,7 +56,7 @@ jobs:
 
       - name: Verify Built Image
         run: |
-          docker run --rm ghcr.io/antoniusfaro/nextjs-docker-learning:latest cat /app/src/app/page.tsx
+          docker run --rm ghcr.io/antoniusfaro/nextjs-docker-learning:latest cat /app/app/page.tsx
 
       - name: Build and Push Docker Image
         run: |
