@@ -54,6 +54,10 @@ jobs:
         run: |
           git log --oneline -n 3
 
+      - name: Verify Built Image
+        run: |
+          docker run --rm ghcr.io/antoniusfaro/nextjs-docker-learning:latest cat /app/src/app/page.tsx
+
       - name: Build and Push Docker Image
         run: |
           docker build --no-cache -t ghcr.io/antoniusfaro/nextjs-docker-learning:latest .
