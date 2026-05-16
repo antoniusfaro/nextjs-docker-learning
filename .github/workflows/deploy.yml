@@ -79,6 +79,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
 
           script: |
+            export APP_NAME="${{ secrets.APP_NAME }}"
             docker pull ghcr.io/antoniusfaro/nextjs-docker-learning:${{ github.sha }}
 
             docker stop nextjs-app || true
